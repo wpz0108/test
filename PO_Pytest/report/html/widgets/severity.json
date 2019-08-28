@@ -1,0 +1,81 @@
+[ {
+  "uid" : "445c6e030d086251",
+  "name" : "test_search[hellohouzhui]",
+  "time" : {
+    "start" : 1566571254546,
+    "stop" : 1566571261078,
+    "duration" : 6532
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "5060c17139a78c1c",
+  "name" : "test_search[hellohouzhui]",
+  "time" : {
+    "start" : 1566572619326,
+    "stop" : 1566572625911,
+    "duration" : 6585
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "6feac121137764a1",
+  "name" : "test_search1[2]",
+  "time" : {
+    "start" : 1566571274408,
+    "stop" : 1566571280893,
+    "duration" : 6485
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "45ce090f17e23a80",
+  "name" : "test_search1[3]",
+  "time" : {
+    "start" : 1566572657906,
+    "stop" : 1566572664612,
+    "duration" : 6706
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "32347e5c6410b15c",
+  "name" : "test_search[1houzhui]",
+  "time" : {
+    "start" : 1566571235840,
+    "stop" : 1566571242327,
+    "duration" : 6487
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "d9ef5f31bda4dc45",
+  "name" : "test_search1[2]",
+  "time" : {
+    "start" : 1566572638449,
+    "stop" : 1566572645078,
+    "duration" : 6629
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "d84aa076395b7611",
+  "name" : "test_search1[3]",
+  "time" : {
+    "start" : 1566571293338,
+    "stop" : 1566571299941,
+    "duration" : 6603
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "9510fa3811fcfcf7",
+  "name" : "test_search[1houzhui]",
+  "time" : {
+    "start" : 1566572600352,
+    "stop" : 1566572606639,
+    "duration" : 6287
+  },
+  "status" : "passed",
+  "severity" : "normal"
+} ]

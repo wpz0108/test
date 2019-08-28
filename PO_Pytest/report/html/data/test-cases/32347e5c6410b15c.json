@@ -1,0 +1,59 @@
+{
+  "uid" : "32347e5c6410b15c",
+  "name" : "test_search[1houzhui]",
+  "fullName" : "scripts.test_xinxi.TestXinxi#test_search[1houzhui]",
+  "historyId" : "ba78c5c0b180a72b1b17217219d51f8e",
+  "time" : {
+    "start" : 1566571235840,
+    "stop" : 1566571242327,
+    "duration" : 6487
+  },
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "parentSuite",
+    "value" : "scripts"
+  }, {
+    "name" : "suite",
+    "value" : "test_xinxi"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestXinxi"
+  }, {
+    "name" : "host",
+    "value" : "HALO-PC"
+  }, {
+    "name" : "thread",
+    "value" : "12924-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "scripts.test_xinxi"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ {
+    "name" : "key",
+    "value" : "'1houzhui'"
+  } ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "32347e5c6410b15c.json",
+  "parameterValues" : [ "'1houzhui'" ]
+}

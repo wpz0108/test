@@ -1,0 +1,105 @@
+{
+  "uid" : "5060c17139a78c1c",
+  "name" : "test_search[hellohouzhui]",
+  "fullName" : "scripts.test_xinxi.TestXinxi#test_search",
+  "historyId" : "efce1214e07af81cac6d32685625e8db",
+  "time" : {
+    "start" : 1566572619326,
+    "stop" : 1566572625911,
+    "duration" : 6585
+  },
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "testStage" : {
+    "status" : "passed",
+    "steps" : [ {
+      "name" : "测试搜索",
+      "time" : {
+        "start" : 1566572619326,
+        "stop" : 1566572625911,
+        "duration" : 6585
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ {
+        "uid" : "eb751261a3fcdbee",
+        "name" : "46c3c8ba-9ba7-43a6-a845-e27e6d426c4f-attachment.attach",
+        "source" : "eb751261a3fcdbee.attach",
+        "type" : "text/plain",
+        "size" : 18
+      }, {
+        "uid" : "6261217db4a41a51",
+        "name" : "01cd9188-6cf3-4d40-81cd-6e518bd01061-attachment.attach",
+        "source" : "6261217db4a41a51.attach",
+        "type" : "text/plain",
+        "size" : 12
+      }, {
+        "uid" : "c276919786ee46c0",
+        "name" : "80b619df-a1a3-4393-87c5-97548477fde3-attachment.attach",
+        "source" : "c276919786ee46c0.attach",
+        "type" : "text/plain",
+        "size" : 12
+      } ],
+      "parameters" : [ {
+        "name" : "key",
+        "value" : "'hellohouzhui'"
+      } ],
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 0,
+      "hasContent" : true
+    } ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 3,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 1,
+    "hasContent" : true
+  },
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "parentSuite",
+    "value" : "scripts"
+  }, {
+    "name" : "suite",
+    "value" : "test_xinxi"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestXinxi"
+  }, {
+    "name" : "host",
+    "value" : "HALO-PC"
+  }, {
+    "name" : "thread",
+    "value" : "12948-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "scripts.test_xinxi"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ {
+    "name" : "key",
+    "value" : "'hellohouzhui'"
+  } ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "5060c17139a78c1c.json",
+  "parameterValues" : [ "'hellohouzhui'" ]
+}

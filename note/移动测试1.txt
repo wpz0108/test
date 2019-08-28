@@ -1,0 +1,576 @@
+adb常用命令
+adb --help 帮助
+adb start-server 启动server
+adb kill-server 关闭
+adb shell pm list packages 展示已经安装的应用
+
+adb devices 获取设备号
+adb -s 192.168.230.101:5555(设备号) shell getprop ro.build.version.release  获取系统版本
+
+adb push D:\pyproject\1.py /sdcard 发送电脑文件到手机 
+adb pull /sdcard/xx D:\pyproject 从手机拉取文件到电脑
+
+adb logcat 查看手机运行日志
+adb shell 手机shell命令 安卓就是小型liunx系统 
+
+adb install path/xx.apk 安装app到手机
+adb uninstall 包名	卸载app
+
+adb shell dumpsys window windows  获取包名 启动名
+	windows中先打开对应app 输入adb命令 看mFocusedApp那一行
+	com.android.settings/.Settings  设置的包名/启动名 
+	com.android.email/.activity.setup.AccountSetupBasics email包名/启动名
+
+adb shell am start -W 包名/启动名
+	thistime 启动名-启动页 (该activity启动耗时) totaltime (应用自身耗时 thistime+应用自身资源耗时)
+	waittime (系统启动应用耗时 totaltime+系统资源启动时间)
+
+
+版本保持一致 
+D:\Genymotion\tools\adb.exe
+D:\Android\android-sdk-windows\platform-tools\adb.exe
+
+Genymotion账号
+wpz0108
+1054626490@qq.com
+wang1054
+
+sdk tools：针对pc平台下使用的工具：比如模拟器，性能追踪可视化工具traceview， platform-tools：针对pc端和移动端进行交互的一些工具：比如adb工具（通过该工具pc端获取移动端log信息）
+	
+
+移动测试分类
+	app功能测试
+		业务逻辑正确性测试 (文档)
+		兼容性测试 (系统版本 分辨率 网络情况)
+		异常测试 (热启动应用 网络切换&中断恢复 电话&信息中断恢复)
+		升级 安装 卸载测试
+		健壮性测试(手机资源消耗 流量消耗 崩溃恢复等测试)
+	app自动化测试 (通过场景和数据的预设 把以人为驱动的测试转化为机器执行 并非所有功能都适合做自动化)
+	app安全测试 (保证app尽量不存在安全问题)
+
+移动测试概述
+
+	移动测试环境搭建
+	包名启动名
+	adb命令
+	移动端自动化测试工具
+	appium基础api
+		前置代码
+		获取app包名 启动名
+		脚本内启动其他app
+		关闭app 关闭驱动对象
+		安装apk到手机
+		手机移除app
+		判断app是否安装
+		发送文件到手机
+		从手机拉取文件
+		获取当前屏幕内元素结构
+		应用置于后台事件
+
+	UIAutomatorViewer
+	元素定位api
+		定位单个元素 id class xpath
+		定位一组元素 id class xpath
+	元素操作api
+		点击
+		发送数据
+		清空输入框
+		获取元素文本内容
+		获取元素属性值
+		获取元素在屏幕坐标
+
+	滑动拖拽事件
+		swipe滑动
+		scroll滑动
+		drag拖拽
+	高级手势TouchAction
+	手机操作api
+	pytest安装介绍
+	pytest运行方式
+	setup teardown函数
+
+
+移动测试环境搭建 
+	java 安卓底层为c c++ 应用层为java 所以需要java环境
+	andriodSDK 提供安卓开发测试必须的api类库
+	andriod模拟器 模拟真机环境
+
+		java 
+			安装jdk
+			配置java环境变量 
+				系统变量里新建"JAVA_HOME"变量，变量值为：C:\Program Files\Java\jdk1.8.0_60（根据自己的jdk的安装路径填写）
+				系统path变量添加 %JAVA_HOME%\bin;%JAVA_HOME%\jre\bin
+			验证 cmd中输入java -version
+		andriodSDK
+			解压sdk压缩包
+			系统变量下新建变量ANDROID_HOME , 变量值: D:\path\android-sdk 
+			SDK Manager.exe 打开 下载必须插件 生成platform-tools文件夹
+				配置国内镜像 点tools 选options 输入镜像地址 端口 勾选force 关闭
+			系统path变量添加 %ANDROID_HOME%\platform-tools;%ANDROID_HOME%\tools;
+			验证 重启命令行 输入adb 不报错
+		andriod模拟器
+			Genymotion 安装之后 打开 选择 Samsung Galaxy S5 - 4.4.4 - API 19 - 1080x1920 下载
+			start 启动模拟器中的系统
+			arm插件拖到打开的genymotion中 可提供安装apk功能
+包名启动名
+	包名决定程序唯一性 不是应用的名字
+	一个启动名对应一个界面
+ADB
+	andriod debug bridge  debug工具 
+	包括client端(pc 发送adb命令)   daemon守护进程 (运行在调试设备中)  server端(pc 管理pc中client和手机daemon间的通信)
+	常用命令 见上面
+
+主流测试工具 
+	robotium  语言java ,仅支持安卓 ,不支持跨应用
+	macaca	java python node.js ,安卓 ios都支持 ,支持跨应用
+	appium java python php node.js ruby等 ,支持安卓 ios ,支持跨应用
+自动化工具关注点 
+	是否支持native webview
+	是否支持获取toast(提示信息弹出 如网络不给力)
+	是否支持跨应用
+
+appium node.js的express框架写的http server 
+	移动端自动化框架 可测试原生 移动网页 混合应用(包含webview) 跨平台 安卓ios及firefox的操作系统
+	跨平台 针对不同平台用一套api编写用例
+	环境搭建
+		python代码->appium-python库->appium->手机模拟器
+		需要appium客户端 appium-python库
+		appium客户端 客户端安装
+			运行 appium-desktop-Setup-1.2.7.exe 启动 点击start server
+		appium客户端 命令行安装
+			安装node.js 
+			运行npm或 node -v查看
+			安装cnpm   npm install -g cnpm --registry=https://registry.npm.taobao.org
+			安装appium	 cnpm install -g appium
+			启动appium 	命令行中输入 appium &
+		appium-python库
+			命令行安装
+				pip install Appium-Python-Client
+			安装包安装
+				安装setuptools 解压进入 在当前文件夹打开命令行 执行 python setup.py install
+				解压 Appium-Python-Client-0.25.tar.gz 进入文件夹 执行 python setup.py install
+
+
+appium基础api
+
+			from time import sleep
+			from appium import webdriver
+			import time
+			import base64
+
+			# server启动参数
+			desired_caps = {}
+			# 设备信息
+			desired_caps['platformName'] ='Android'
+			desired_caps['platformVersion'] ='4'
+			desired_caps['deviceName'] ='192.168.230.101:5555'
+			# APP信息
+			desired_caps['appPackage']='com.android.dialer'
+			desired_caps['appActivity']='.DialtactsActivity'
+			# 支持中文
+			# desired_caps['unicodeKeyboard']=True
+			# desired_caps['resetKeyboard']=True
+
+			driver=webdriver.Remote('http://localhost:4723/wd/hub',desired_caps)
+
+			# 当前app处于后台几秒钟 模拟热启动
+			driver.background_app(5)
+			# 获取包名
+			# print(driver.current_package)
+			# 获取启动名
+			# print(driver.current_activity)
+			# 启动其他app 参数 (包名,启动名)
+			# driver.start_activity('com.android.email','.activity.setup.AccountSetupBasics')
+
+			# 关闭当前操作的app 不会关闭驱动对象
+			# driver.close_app()
+
+			# print(driver.current_activity)
+			# print(driver.current_package)
+
+			# 关闭驱动对象 同时关闭所有关联的app
+			# driver.quit()
+
+			# print(driver.current_activity)
+			# print(driver.current_package)
+
+			# 手机中移除app 填写需要卸载的包名 app_id
+			# driver.remove_app('com.android.launcher')
+			# 安装apk到手机 参数 app_path
+			# driver.install_app(r'D:\pyproject\appium\anzhi.apk')
+
+			# 判断app是否安装 包名app_id
+			# print(driver.is_app_installed('com.android.settings'))
+
+			# 发送数据到手机文件 需要import base64 encode编码 decode解码
+			# data=str(base64.b64encode('hello 2019-8-17'.encode('utf-8')),'utf-8')
+			# driver.push_file('/sdcard/a1.txt',data)
+
+			# 从手机拉取文件
+			# data1=driver.pull_file('/sdcard/a1.txt')
+			# print(str(base64.b64decode(data1),'utf-8'))
+
+			# 获取当前屏幕元素结构
+			# print(driver.page_source)
+			sleep(2)
+			driver.quit()
+
+UIAutomatorViewer 扫描分析安卓应用的ui控件工具
+	
+	双击打开安卓sdk目录下tools目录 bin中的UIAutomatorViewer
+	打开安卓模拟器或真机
+	打开应用app
+	UIAutomatorViewer左上角第二个按钮 会生成当前app 当前页面ui控件截图
+
+	元素定位 单个element 一组elements 
+		id driver.find_element_by_id -->resource-id
+		class driver.find_element_by_class_name -->class
+		xpath driver.find_element_by_xpath
+				 //*[contains(@resource-id,id值)]  
+				//*[contains(@class,class值)] 
+				//*[contains(@text,文本值)] 
+	WebDriverWait显式等待
+		WebDriverWait(driver,timeout,poll_frequency).until(method)
+		参数 手机驱动对象 超时时间 搜索间隔时间默认0.5s method定位方法 匿名函数 (lambda x:x.find_element_by_xxx)
+		
+	代码	示例	
+				from time import sleep
+				from appium import webdriver
+				import time
+				from selenium.webdriver.support.wait import WebDriverWait
+
+				# server启动参数
+				desired_caps = {}
+				# 设备信息
+				desired_caps['platformName'] ='Android'
+				desired_caps['platformVersion'] ='4'
+				desired_caps['deviceName'] ='192.168.230.101:5555'
+				# APP信息
+				# com.android.dialer/.DialtactsActivity 电话的包名/启动名
+				desired_caps['appPackage']='com.android.mms'
+				desired_caps['appActivity']='.ui.ConversationList'
+				# desired_caps['appPackage']='com.android.settings'
+				# desired_caps['appActivity']='.Settings'
+
+				driver=webdriver.Remote('http://localhost:4723/wd/hub',desired_caps)
+				# 元素获取 单个获取element  id class xpath
+				# driver.find_element_by_id('com.android.mms:id/search').click()
+				# driver.find_element_by_xpath('//*[contains(@content-desc,"Search")]').click()
+				# driver.find_element_by_xpath('//*[contains(@resource-id,"com.android.mms:id/search")]').click()
+				# driver.find_element_by_class_name('android.widget.ImageView').click()
+				# 元素获取 一组获取elements  id class xpath
+				# ids=driver.find_elements_by_id('android:id/title')
+				# print(ids)
+				# ls=driver.find_elements_by_xpath("//*[contains(@text,'S')]")
+				# print(ls)
+				# print(type(ls))
+				# print(len(ls))
+				# 元素等待 导入WebDriverWait类
+				elem=WebDriverWait(driver,20,1).until(lambda x:x.find_element_by_xpath('//*[contains(@resource-id,"android:id/up")]'))
+				elem.click()
+				sleep(2)
+				driver.quit()
+	元素操作api
+		点击 click()
+		发送数据 send_keys(value) 发送到输入框的文本值
+		中文输入支持
+		清空输入框 clear()
+		获取元素属性值 get_attribute(属性名) 
+			name-->content-desc text-->text  className-->className  resourceId-->resourceId
+		获取元素位置 element.location 
+		
+			from time import sleep
+			from appium import webdriver
+			import time
+			from selenium.webdriver.support.wait import WebDriverWait
+
+			# server启动参数
+			desired_caps = {}
+			# 设备信息
+			desired_caps['platformName'] ='Android'
+			desired_caps['platformVersion'] ='4'
+			desired_caps['deviceName'] ='192.168.230.101:5555'
+			# APP信息
+			# com.android.dialer/.DialtactsActivity 电话的包名/启动名
+			# desired_caps['appPackage']='com.android.mms'
+			# desired_caps['appActivity']='.ui.ConversationList'
+			desired_caps['appPackage']='com.android.settings'
+			desired_caps['appActivity']='.Settings'
+			# 支持中文输入
+			# desired_caps['unicodeKeyboard']=True
+			# desired_caps['resetKeyboard']=True
+
+			# 元素操作 点击 填写 清空
+			driver=webdriver.Remote('http://localhost:4723/wd/hub',desired_caps)
+			# sleep(2)
+			# driver.find_element_by_id('com.android.mms:id/search').click()
+			# sleep(2)
+			# driver.find_element_by_id('android:id/search_src_text').send_keys('你好')
+			# sleep(2)
+			# driver.find_element_by_id('android:id/search_src_text').clear()
+
+			# 获取文本 text
+			# titles=driver.find_elements_by_id("android:id/title")
+			# for i in titles:
+			#     print(i.text)
+			# 获取属性
+			# elems=driver.find_elements_by_id('android:id/title')
+			# for i in elems:
+			#     print(i.get_attribute('name'))
+			# print('------------')
+			# for i in elems:
+			#     print(i.get_attribute('text'))
+			# print('------------')
+			# for i in elems:
+			#     print(i.get_attribute('resourceId'))
+			# print('------------')
+			# for i in elems:
+			#     print(i.get_attribute('className'))
+			# 获取位置
+			elem=driver.find_element_by_class_name('android.widget.LinearLayout')
+			print(elem.location)
+
+滑动拖拽事件
+	swipe 从一个坐标滑到另一个坐标 两个点之间的滑动 swipe(start_x,start_y,end_x,end_y,duration=none) 滑动时间参数
+	scroll 从一个元素滑到另一个元素 scroll(orgin_el,destionation_el)
+	drag_and_drop 一个元素拖到另一个元素位置   drag_and_drop(orgin_el,destionation_el)
+
+	代码			import time
+				from appium import webdriver
+				# server启动参数
+				desired_caps = {}
+				# 设备信息
+				desired_caps['platformName'] ='Android'
+				desired_caps['platformVersion'] ='4'
+				desired_caps['deviceName'] ='192.168.230.101:5555'
+				# APP信息
+				desired_caps['appPackage']='com.android.settings'
+				desired_caps['appActivity']='.Settings'
+
+				driver=webdriver.Remote('http://localhost:4723/wd/hub',desired_caps)
+				# swipe 时间参数越长 越精准 默认大概1s(ms) 参数为坐标
+				# print(time.time())
+				# driver.swipe(50,1000,50,200,5000)
+				# print(time.time())
+				# scroll 和swipe比 都存在惯性 参数为元素
+				s=driver.find_element_by_xpath("//*[contains(@text,'Sound')]")
+				l=driver.find_element_by_xpath("//*[contains(@text,'Location')]")
+				# print(s)
+				# print(l)
+				# driver.scroll(l,s)
+				# drag 和scroll比 drag没有惯性 参数都是元素
+				# drag 和swipe比 drag传元素 swipe传坐标 swipe时间比较长时 和drag一样效果
+				driver.drag_and_drop(l,s)
+				driver.drag_and_drop(s,l)
+
+滑动手机查找某一元素 找到了点击案例
+
+			from appium import webdriver
+
+			desired_caps = {}
+			# 设备信息
+			desired_caps['platformName'] ='Android'
+			desired_caps['platformVersion'] ='4'
+			desired_caps['deviceName'] ='192.168.230.101:5555'
+			# APP信息
+			# com.android.dialer/.DialtactsActivity 电话的包名/启动名
+			desired_caps['appPackage']='com.android.settings'
+			desired_caps['appActivity']='.Settings'
+			desired_caps['unicodeKeyboard']=True
+			desired_caps['resetKeyboard']=True
+
+			driver=webdriver.Remote('http://localhost:4723/wd/hub',desired_caps)
+			# 查找关于手机选项 找不到就滑动屏幕
+			while True:
+			    try:
+			        driver.find_element_by_xpath("//*[contains(@text,'About')]").click()
+			        break
+			    except Exception:
+			        # driver.swipe(100, 1000, 100, 2000)
+			        # 根据宽高设置
+			        width=driver.get_window_size()['width']
+			        height=driver.get_window_size()['height']
+			        start_x=width*0.5
+			        end_x=start_x
+			        start_y=height*0.75
+			        end_y=height*0.25
+			        driver.swipe(start_x,start_y,end_x,end_y,3000)
+			elems=driver.find_elements_by_class_name('android.widget.TextView')
+			# for-else for中正常退出时(就是for中代码走完没找到)会执行else for不是正常循环(就是找到了 break退出)else就不会执行
+			for i in elems:
+			    # if i.text=='4.4.4':
+			    if '4.4.4' in i.text:
+			        print('has')
+			        break
+			else:
+			    print('not has')
+
+高级手势TouchAction
+	TouchAction是appiumDriver的辅助类 针对手势操作 滑动 长按 拖动等 将一系列动作放在一个链条中发送给服务器 来解析执行 所有手势需要perform()执行
+
+	轻敲 tap(element=none,x=none,y=none) 元素 元素x轴坐标 元素y轴坐标 相对于左上角
+			TouchAction(driver).tap(element).perform() 元素定位
+			TouchAction(driver).tap(x=xx,y=xxx).perform() 坐标定位 关键字参数 不写默认第一个参数是element
+	按下抬起 press(element=none,x=none,y=none) 使用同tap  抬起 release()
+				TouchAction(driver).press(element).wait(2000).release().perform()
+				TouchAction(driver).press(x=xx,y=xxx).wait(2000).release().perform()
+	长按 long_press(element=none,x=none,y=none,duration=1000) duration 长按时间 默认1000ms
+			TouchAction(driver).long_press(x=xx,y=xxx).release().perform()
+			TouchAction(driver).long_press(element).release().perform()
+			TouchAction(driver).long_press(element,duration=2000).release().perform() 改变默认长按时间
+	手指移动 move_to(element=none,x=none,y=none) x 相对前一个元素x轴偏移量 y 相对前一元素y轴偏移量
+		`		TouchAction(driver).press(ele1).move_to(ele2).release().perform() 元素方式滑动
+		`		TouchAction(driver).press(x=500,y=500).wait(100).move_to(x=100,y=100).release().perform() 元素方式滑动
+
+		元素代码
+			import time
+			from appium import webdriver
+			from appium.webdriver.common.touch_action import TouchAction
+
+			desired_caps = {}
+			# 设备信息
+			desired_caps['platformName'] ='Android'
+			desired_caps['platformVersion'] ='4'
+			desired_caps['deviceName'] ='192.168.230.101:5555'
+			# APP信息
+			# com.android.dialer/.DialtactsActivity 电话的包名/启动名
+			desired_caps['appPackage']='com.android.settings'
+			desired_caps['appActivity']='.Settings'
+			# desired_caps['appPackage']='com.android.gesture.builder'
+			# desired_caps['appActivity']='.CreateGestureActivity'
+
+			driver=webdriver.Remote('http://localhost:4723/wd/hub',desired_caps)
+			#tap 轻敲 只传入元素 就点击元素 ;只传入坐标 点击屏幕左上角为原点的坐标位置元素  ;元素 x y都传 就以元素为准
+			# ele=driver.find_element_by_xpath("//*[contains(@text,'Dis')]")
+			# TouchAction(driver).tap(x=200,y=400).perform()
+			# TouchAction(driver).tap(ele).perform()
+
+			# press 按住不松手 等待 松开 执行以上操作 press(也是两种 传入元素或者坐标)
+			# TouchAction(driver).press(x=500,y=500).wait(5000).release().perform()
+			# 长按
+			# ele=driver.find_element_by_xpath("//*[contains(@text,'Sound')]")
+			# TouchAction(driver).long_press(ele).release().perform()
+
+			ele=driver.find_element_by_xpath("//*[contains(@text,'Sound')]")
+			ele1=driver.find_element_by_xpath("//*[contains(@text,'Apps')]")
+			# move_to 移动到 屏幕滑动
+			TouchAction(driver).press(ele1).move_to(ele).release().perform()
+
+
+		手势解锁设置手势案例
+			import time
+			from appium import webdriver
+			from appium.webdriver.common.touch_action import TouchAction
+
+			desired_caps = {}
+			# 设备信息
+			desired_caps['platformName'] ='Android'
+			desired_caps['platformVersion'] ='4'
+			desired_caps['deviceName'] ='192.168.230.101:5555'
+			# APP信息
+			# com.android.dialer/.DialtactsActivity 电话的包名/启动名
+			desired_caps['appPackage']='com.android.settings'
+			desired_caps['appActivity']='.ChooseLockPattern'
+
+			driver=webdriver.Remote('http://localhost:4723/wd/hub',desired_caps)
+			# 手势解锁设置图案 \换行 或者用()将整个代码包住也可以换行
+			TouchAction(driver).press(x=205,y=585)\
+			    .move_to(x=330,y=0).move_to(x=0,y=330).move_to(x=-330,y=330)\
+			    .release().perform()
+			# 设备时间 分辨率
+			print(driver.device_time)
+			print(driver.get_window_size())
+
+
+手机操作api
+	获取手机时间 print(driver.device_time) 
+	获取手机宽高	print(driver.get_window_size())
+	发送键到设备	keyevent(keycode,metastate=none)
+				press_keycode(keycode,metastate=none) 发送给设备的关键代码/关键代码元信息,一般用默认值
+			# 多次按音量增加键(24代表音量增加)
+			for i in range(3):
+				driver.keyevent(24)
+
+	操作手机通知栏 driver.open_notifications() 
+	获取手机当前网络	 print(driver.network_connection)
+			connectionType(用数字表示类型)
+				0 (none)
+				1 (Airplane Mode)
+				2 (Wifi only)	
+				4 (Data only)	
+				6 (All network on)
+	设置手机网络	driver.set_network_connection(connectionType)
+	手机截图 driver.get_screenshot_as_file(filename) 参数 指定目录下指定格式的图片
+
+
+
+
+		# //*[contains(@text,'设')]
+		# //*[@text='设']
+		# "text,设置" 包含
+		# "text,设置,0" 包含
+		# "text,设置,1" 精准
+		def make_xpath_feature(loc):
+		    start="//*["
+		    end="]"
+		    feature=""
+		    args=loc.split(',')
+		    if len(args)==2:
+		        feature=start+"contains(@"+args[0]+",'"+args[1]+"')"+end
+		        # print(feature)
+		    elif len(args)==3:
+		        if args[2]=="0":
+		            feature = start + "contains(@" + args[0] + ",'" + args[1] + "')" + end
+		            # print(feature)
+		        elif args[2]=="1":
+		            feature=start+"@"+args[0]+"='"+args[1]+"'"+end
+		            # print(feature)
+		    return feature
+		def main():
+		    loc="text,设置,1"
+		    feature=make_xpath_feature(loc)
+		    print(feature)
+		if __name__ == '__main__':
+		    main()
+
+
+				# //*[contains(@text,'设')]
+				# //*[@text='设' and contains(@text,'置')]
+				# "text,设置" 包含
+				# "text,设置,0" 包含
+				# "text,设置,1" 精准
+				# ["text,设置" ,"text,设置,1"]
+				def make_xpath_unit_feature(loc):
+				    feature=""
+				    args = loc.split(',')
+				    if len(args) == 2:
+				        feature = "contains(@" + args[0] + ",'" + args[1] + "')"
+				        # print(feature)
+				    elif len(args) == 3:
+				        if args[2] == "0":
+				            feature = "contains(@" + args[0] + ",'" + args[1] + "')"
+				            # print(feature)
+				        elif args[2] == "1":
+				            feature = "@" + args[0] + "='" + args[1] + "'"
+				            # print(feature)
+				    return feature
+				def make_xpath_feature(loc):
+				    start="//*["
+				    end="]"
+				    feature=""
+				    if isinstance(loc,str):
+				        feature=make_xpath_unit_feature(loc)
+				        # return start+feature+end
+				    elif isinstance(loc,list):
+				        for i in loc:
+				            feature+=make_xpath_unit_feature(i)+" and "
+				        feature=feature.rstrip(" and ")
+				    return start+feature+end
+				def main():
+				    # loc="text,设置,1"
+				    loc=["text,设置,1","name,lisi"]
+				    feature=make_xpath_feature(loc)
+				    # feature=make_xpath_unit_feature(loc)
+				    print(feature)
+				if __name__ == '__main__':
+				    main()

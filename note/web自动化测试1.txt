@@ -1,0 +1,543 @@
+内容 	自动化测试相关知识
+		元素定位
+		selenium自动测试框架
+		unittest
+目录	
+		自动化入门 
+			认识自动化及自动化入门
+			自动化测试工具(框架)选择
+			seleniumIDE插件使用
+			FireBug插件工具使用
+		web自动化工具(webDriver)基础
+			元素基础定位
+			Xpath css元素定位
+			元素操作
+			浏览器操作方法
+		web自动化工具(webDriver)中级
+			鼠标操作
+			键盘操作
+			元素等待
+			html特殊元素处理
+			窗口截图
+		web自动化高级
+			自动化测试模型
+			UnitTest框架
+			UnitTest框架断言
+			生成html测试报告
+			测试报告自动发送邮件
+
+什么是自动化测试 
+	通过测试工具或编写脚本等其他手段 按测试人员预定计划对软件产品进行自动化测试
+
+自动化测试分类
+	web(ui)--自动化测试
+	接口--自动化测试
+	移动(app)--自动化测试
+	单元测试--自动化测试
+
+web自动化测试属于黑盒测试 (为什么要自动化测试 优缺点)
+	优点 较少时间运行更多的测试用例
+		自动化脚本可重复执行
+		减少人为错误
+		测试数据存储
+	缺点 不能取代人工
+		手工测试发现缺陷更多
+		测试人员技能要求
+
+web自动化测试使用条件及场景
+	什么项目适合自动化测试 
+		需求变更不频繁
+		项目周期长
+		项目需要回归测试
+	场景 自动化测试解决的问题
+		解决回归测试 项目发新版本后对之前功能进行验证
+		压力测试 服务器处理多个请求的能力
+		兼容性测试 不同浏览器 
+		提高测试效率 保证产品质量
+
+测试工具汇总
+	web自动化测试 selenium, robot framework
+	app自动化测试 appium ,monkeyrunner, uiautomation
+	pc客户端自动化测试 qtp
+	接口自动化测试 jmeter, postman, httpUnit, RESTClient
+	云测平台 Testin Testbird
+	性能测试 jmeter loadRunner
+
+自动化测试分类
+	自动化功能测试
+		黑盒测试-- 功能测试
+		灰盒测试-- 接口测试
+		白盒测试-- 单元测试
+	自动化性能测试 使用工具 Loadrunner、Jmeter等
+
+
+selenium特点
+	开源  源代码开放
+	跨平台 linux windows mac
+	核心功能 在多个浏览器进行自动化测试
+	多语言 java python c# javascript ruby等
+	成熟稳定 google 腾讯等使用
+	功能强大 实现商业工具大部分功能
+selenium重点
+	1.0中的seleniumIDE和2.0中的webDriver  3.0不成熟
+
+seleniumIDE是什么?
+为什么学习seleniumIDE?
+
+command	 pause 暂停 /  type 输入值     / close 关闭页面 / open 打开页面
+target 	 时间/ms    /  定位元素表达式   /               / 网址
+value               /  输入的值        /               /
+
+webdriver(selenium2) 定位操作元素
+	用于web应用程序的自动化测试
+	提供了友好的api
+	webdriver是一套类库 不依赖任何测试框架 除了必要的浏览器驱动
+
+webdriverAPI支持的浏览器 需要相应的浏览器driver
+	firefox 重点 元素定位和操作有良好的支持 对js支持好
+	IE 只能windows 最慢
+	chrome 元素定位和操作有良好的支持 对js支持好
+	safari
+	HtmlUnit 无ui界面运行 速度最快
+
+firefox(火狐)优点
+	seleniumIDE
+	firebug
+	对webdriverAPI友好
+
+基于python环境
+	windows系统
+	python3.5及以上
+	安装selenium包
+		安装 pip install selenium  
+		卸载 pip uninstall selenium
+		指定版本 pip install selenium=x.xx.x
+		查看 pip show selenium
+		python -m pip install --upgrade pip  升级pip到最新版本
+	火狐浏览器及驱动器
+		firefox 48以上 需要 selenium 3.x + firefox驱动(driver)--geckodriver
+		https://github.com/mozilla/geckodriver/releases 
+		geckodriver.exe复制粘贴到python的Scripts目录下
+		cmd中输入geckodriver 看是否成功
+	pycharm python开发工具
+
+webdriver元素定位八种方式
+	id   //属性定位
+	name //属性定位
+	class_name	//属性定位
+	tag_name	//元素标签定位
+	link_text   //超链接定位 完全匹配
+	partial_link_text //超链接定位 模糊匹配
+	Xpath //元素路径定位
+	css //css选择器定位
+
+id定位 前提有id属性 find_element_by_id()
+	注册页面 id定位 自动填写账号密码 3秒后关闭窗口
+
+			from selenium import webdriver
+			from time import sleep
+			# 实例化浏览器
+			driver=webdriver.Firefox()
+			# 打开页面
+			url=r"file:///d:/test/login.html"
+			driver.get(url)
+			# 找到元素 填写
+			driver.find_element_by_id('name').send_keys('admin')
+			driver.find_element_by_id('pwd').send_keys('123456')
+			# 停三秒 退出
+			sleep(3)
+			driver.quit()
+
+name定位 find_element_by_name() 同id定位
+class_name定位  find_element_by_class_name()  同id定位
+tag_name定位  find_element_by_tag_name('input') 同id定位
+link_text定位  find_element_by_link_text('登录').click()  同id定位
+partial_link_text定位  find_element_by_partial_link_text() 链接的文本需要唯一 可以用部分文本 能确定唯一就可以 同link_text
+
+find_element[s]_by_xxx() 查找符合条件的所有元素 返回列表(数组)形式 下标获取 find_elements_by_name("xx")[0].操作(send_keys() click())
+
+xpath定位 xml-path  driver.find_element_by_xpath()
+	定位方式
+		1路径定位
+			绝对路径 
+				从最外层开始 如 /html/body/div/p[2]
+				以/开头 使用firebug快速生成 f12定位到元素 右键 复制-xpath
+			相对路径
+				从第一个符合条件的元素开始 一般配合属性使用 如 //input[@id='userA']
+				// 开头
+		2元素属性定位 快速定位 利用元素唯一性 如 //*[@id="userA"]
+		3层级与属性结合定位 要找的元素没有属性 父元素有 如 //*[@id="p1"]/input
+		4属性与逻辑结合定位 解决元素之间因相同属性重名 如 //*[@id="p1" and @class="test1"]
+
+	延伸 //*[text()="xxx"] 文本内容为xxx的元素
+		//*[starts-with(@attribute,'xxx')] 属性以xxx开头的元素
+		//*[contains(@attribute,'xxx')] 属性含有xxx的元素
+css定位  driver.find_element_by_css_selector()
+	方式 id选择器 	#开头
+		class选择器 	.开头
+		元素选择器	如input p 
+		属性选择器	如[id='name'] id class是特殊的属性 有简写
+		层级选择器 	element>element 如 form>input 或 p input 或 p [type="password"]
+	延伸
+		input[type^='p'] type属性以p开头
+		input[type$='p'] type属性以p结尾
+		input[type*='p'] type属性包含p字母
+
+定位另外方法 By类 不推荐
+			from selenium import webdriver
+			from time import sleep
+			#导入By类
+			from selenium.webdriver.common.by import By
+			# 实例化浏览器
+			driver=webdriver.Firefox()
+			#driver.maximize_window() 
+			# 打开页面
+			url=r"file:///d:/test/login.html"
+			driver.get(url)
+			# 找到元素 填写
+			# driver.find_element(By.CSS_SELECTOR,'#name').send_keys('admin')
+			# driver.find_element(By.XPATH,'//*[@id="name"]').send_keys('admin')
+			#att=driver.find_element(By.XPATH,'/html/body/div[1]/form/button/a').is_displayed()
+			#print(attr)
+			driver.find_element(By.ID,'name').send_keys('admin11')
+			# 停三秒 退出
+			sleep(3)
+			driver.quit()
+
+
+为什么学习元素操作 
+	让脚本模拟用户给浏览器指定元素输入值
+	模拟人为删除
+	模拟点击等操作
+
+webdriver操作浏览器方法
+
+	clear() 清除文本
+	send_keys() 模拟输入
+	click() 模拟点击
+	text 元素的大小
+	size 元素的文本
+	get_attribute() 获取元素属性的值
+	is_displayed() 元素是否可见
+	is_enabled() 元素是否可用
+
+	maximize_window() 最大化窗口
+	set_window_size() 设置浏览器宽高像素
+	set_window_position() 设置浏览器位置 像素
+	back() 后退
+	forward() 前进
+	refresh() 刷新
+	close() 关闭单个窗口
+	quit() 关闭所有窗口
+	title 获取页面title
+	current_url 当前页面url
+
+操作鼠标 键盘方法
+	鼠标 封装在ActionChains方法中 perform()执行行为
+		(from selenium.webdriver.common.action_chains import ActionChains)
+
+		context_click() 右键点击
+		double_click() 双击
+		drag_and_drop() 拖动
+		move_to_element() 鼠标悬停
+		perform() 执行上述方法
+
+				from selenium import webdriver
+				from time import sleep
+				from selenium.webdriver.common.action_chains import ActionChains
+				# 实例化浏览器
+				driver=webdriver.Firefox()
+				# 打开页面
+				url=r"file:///d:/test/login.html"
+				driver.get(url)
+				sleep(3)
+				#定位元素
+				element=driver.find_element_by_css_selector(".username")
+				#实例化ActionChains对象 调用方法 执行
+				ActionChains(driver).context_click(element).perform()
+				sleep(2)
+				driver.quit()
+
+		source=driver.find_element_by_xx(xx) 要移动元素
+		target=driver.find_element_by_xx(xx) 移动到哪个元素里
+			ActionChains(driver).drag_and_drop(source,target).perform()
+			ActionChains(driver).drag_and_drop_by_offset(source,100,200).perform() 源元素偏移量
+	键盘 封装在keys类中 (from selenium.webdriver.common.keys import Keys)
+		send_keys(Keys.BACK_SPACE) 删除键 backspace <--
+		send_keys(Keys.SPACE)  空格键 space
+		send_keys(Keys.TAB) 制表键 tab
+		send_keys(Keys.ESCAPE) 回退键 esc
+		send_keys(Keys.ENTER) 回车键 enter
+		send_keys(Keys.CONTROL,'a') 全选 ctrl+a
+		send_keys(Keys.CONTROL,'c') 复制 ctrl+c
+		send_keys(Keys.CONTROL,'v') 粘贴 ctrl+v
+
+				from selenium import webdriver
+				from time import sleep
+				from selenium.webdriver.common.action_chains import ActionChains
+				from selenium.webdriver.common.keys import Keys
+				driver=webdriver.Firefox()
+				# 打开页面
+				url=r"file:///d:/test/login.html"
+				driver.get(url)
+				driver.find_element_by_css_selector(".username").send_keys("admin1")
+				sleep(3)
+				driver.find_element_by_css_selector(".username").send_keys(Keys.BACK_SPACE)
+				sleep(3)
+				driver.find_element_by_css_selector(".username").send_keys(Keys.CONTROL,'a')
+				driver.find_element_by_css_selector(".username").send_keys(Keys.CONTROL,'c')
+				driver.find_element_by_css_selector(".password").send_keys(Keys.CONTROL,'v')
+				# source=driver.find_element_by_css_selector(".username")
+				# ActionChains(driver).drag_and_drop_by_offset(source,100,200).perform()
+				sleep(2)
+				driver.quit()
+
+
+元素等待 webdriver定位元素时如果没找到 会在指定时间内一直等待
+	为什么设置等待 
+		由于网速问题 电脑配置问题 服务器处理请求问题 导致元素不能第一时间加载 造成代码异常
+		
+	显式等待(了解)
+		需要导入等待类和判断条件类
+		from selenium.webdriver.support.wait import WebDriverWait
+		from selenium.webdriver.support import expected_conditions as EC
+						浏览器对象 超时时间  检测间隔默认0.5s
+		WebDriverWait(driver, timeout, poll_frequency=0.5)
+
+					from selenium import webdriver
+					from time import sleep
+					# from selenium.webdriver.common.action_chains import ActionChains
+					# from selenium.webdriver.common.keys import Keys
+					from selenium.webdriver.common.by import By
+					from selenium.webdriver.support import expected_conditions as EC
+					from selenium.webdriver.support.wait import WebDriverWait
+
+					driver=webdriver.Firefox()
+					# 打开页面
+					url=r"file:///d:/test/login.html"
+					driver.get(url)
+					element=(By.CSS_SELECTOR,'.username1')
+					element=WebDriverWait(driver,5).until(EC.presence_of_element_located(element))
+					element.send_keys("admin")
+					sleep(2)
+					driver.quit()
+	显式和隐式区别:
+		显式对单个元素有效 隐式对全局元素
+		显式封装在WebDriverWait类中 隐式直接通过浏览器实例化对象 driver调用 
+
+	隐式等待(掌握) driver.implicitly_wait(30)
+		等待元素加载指定时长 超时抛出noSuchElementException异常 一般使用隐式等待
+		如果定位元素失败 就会触发隐式等待时长 等待时间内找到元素 就继续执行 否则抛出异常
+		第一次就定位到元素不会触发隐式等待时长
+
+				from selenium import webdriver
+				from time import sleep
+
+				driver=webdriver.Firefox()
+				url=r"file:///d:/test/login.html"
+				driver.get(url)
+				# 最大化窗口 设置隐式等待 一般30s 一般项目首先做的
+				driver.maximize_window()
+				driver.implicitly_wait(30)
+
+				driver.find_element_by_css_selector(".username1").send_keys('admin')
+				sleep(2)
+				driver.quit()
+
+下拉选择框定位 select
+	1 if判断定位 定位option
+				from selenium import webdriver
+				from time import sleep
+
+				driver=webdriver.Firefox()
+				url=r"file:///d:/test/login.html"
+				driver.get(url)
+				# 最大化窗口 设置隐式等待 一般30s 一般项目首先做的
+				# driver.maximize_window()
+				driver.implicitly_wait(30)
+				tags=driver.find_elements_by_tag_name('option')
+				for tag in tags:
+				    if tag.get_attribute('value')=="opel":
+				        tag.click()
+				        sleep(2)
+				for tag in tags:
+				    if tag.get_attribute('value') == "audi":
+				        tag.click()
+				sleep(2)
+				driver.quit()
+
+	2 select类定位 只能定位select元素
+		select_by_index() 根据option索引 0开始
+		select_by_value() 根据option属性值
+		select_by_visible_text() 根据option显示的文本定位
+
+		from selenium.webdriver.support.select import Select  导入select类
+
+				from selenium import webdriver
+				from time import sleep
+				from selenium.webdriver.support.select import Select
+
+				driver=webdriver.Firefox()
+				url=r"file:///d:/test/login.html"
+				driver.get(url)
+				# 最大化窗口 设置隐式等待 一般30s 一般项目首先做的
+				# driver.maximize_window()
+				driver.implicitly_wait(30)
+
+				webElement=driver.find_element_by_css_selector('select')
+				select=Select(webElement)
+				select.select_by_index(1)
+				sleep(2)
+				select.select_by_visible_text("Audi")
+				sleep(2)
+				select.select_by_value('volvo')
+				sleep(2)
+				driver.quit()
+
+警告框处理(alert confirm prompt)
+	方法 text 返回alert confirm prompt中的文字信息
+		accept() 接受对话框选项
+		dismiss() 取消对话框选项
+
+				from selenium import webdriver
+				from time import sleep
+
+				driver=webdriver.Firefox()
+				url=r"file:///d:/test/login.html"
+				driver.get(url)
+				# 最大化窗口 设置隐式等待 一般30s 一般项目首先做的
+				# driver.maximize_window()
+				driver.implicitly_wait(30)
+				
+				driver.find_element_by_css_selector("#alert").click()
+				sleep(2)
+				# 获取弹窗 获取弹窗文本内容
+				alert=driver.switch_to.alert
+				text=alert.text
+				# 确认 [ alert.dismiss() 取消 ]
+				alert.accept()
+				driver.find_element_by_css_selector('.username').send_keys(text)
+				sleep(2)
+				driver.quit()
+滚动条处理 js调用window句柄
+
+			from selenium import webdriver
+			from time import sleep
+
+			driver=webdriver.Firefox()
+			url=r"file:///d:/test/login.html"
+			driver.get(url)
+			# 最大化窗口 设置隐式等待 一般30s 一般项目首先做的
+			# driver.maximize_window()
+			driver.implicitly_wait(30)
+			js1="window.scrollTo(0,10000)"
+			js2="window.scrollTo(0,0)"
+			sleep(2)
+			# 滚动到底部
+			driver.execute_script(js1)
+			sleep(2)
+			# 滚动到顶部
+			driver.execute_script(js2)
+			sleep(2)
+			driver.quit()
+
+frame表单切换 一个页面有多个表单需要填写 
+	driver.switch_to.frame("表单name或id")
+	driver.switch_to.default_context() 恢复默认页面 在当前页面操作其他页面 需要先回到默认页面 才能接着操作
+
+	页面中有其他iframe
+
+				<!DOCTYPE html>
+				<html lang="en">
+				<head>
+					<meta charset="UTF-8">
+					<title>Document</title>
+				</head>
+				<body>
+					<form>
+						<input type="text" name="username" class="username">
+						<input type="password" name="password" class="password">
+					</form>
+					<iframe src="./frame1.html" id='frame1'></iframe>
+					<iframe src="./frame2.html" id='frame2'></iframe>
+				</body>
+				</html>
+
+		from selenium import webdriver
+		from time import sleep
+
+		driver=webdriver.Firefox()
+		url=r"file:///d:/test/login.html"
+		driver.get(url)
+		# 主页面填写用户名
+		driver.find_element_by_css_selector('.username').send_keys('admin')
+		# 进入表单1 填写表单1
+		driver.switch_to.frame('frame1')
+		driver.find_element_by_css_selector('#name1').send_keys('admin1')
+		# 回到默认页面
+		driver.switch_to.default_content()
+		# 进入表单2 填写表单2
+		driver.switch_to.frame('frame2')
+		driver.find_element_by_css_selector('#name2').send_keys('admin2')
+		# 回到默认页面
+		driver.switch_to.default_content()
+		# 主页面填写密码
+		driver.find_element_by_css_selector('.password').send_keys('123456')
+		sleep(2)
+		driver.quit()
+
+多窗口 窗口切换
+	webdriver中封装了获取当前窗口句柄的方法和所有窗口句柄的方法及切换指定窗口句柄的方法 句柄(handle 窗口唯一识别码)
+	driver.current_window_handle 获取当前窗口句柄
+	driver.window_handles  获取所有窗口句柄
+	driver.switch_to.window(handle) 切换指定窗口
+
+			from selenium import webdriver
+			from time import sleep
+			# 当前页面点击跳转 切换到另一个窗口 填写信息 切换回原来页面 填写信息 关闭
+			driver=webdriver.Firefox()
+			url=r"file:///d:/test/index.html"
+			driver.get(url)
+			# 获取当前窗口句柄
+			current=driver.current_window_handle
+			driver.find_element_by_link_text('注册').click()
+			#获取所有窗口句柄 循环
+			handles=driver.window_handles
+			for handle in handles:
+			    if handle!=current:
+			        # 切换到新打开的窗口
+			        driver.switch_to.window(handle)
+			        driver.find_element_by_css_selector('.username').send_keys('admin')
+			 # 切换回之前窗口 填一个信息       
+			driver.switch_to.window(current)
+			driver.find_element_by_css_selector('.name').send_keys('admin1')
+			driver.quit()
+
+窗口截图 (掌握)
+	自动化执行脚本 出错时打印的信息不明确 如果在执行出错时对当前窗口截图保存 方便查看出错原因
+	get_screenshot_as_file(img-path) 图片保存路径
+
+		from selenium import webdriver
+		from time import sleep
+
+		driver=webdriver.Firefox()
+		url=r"file:///d:/test/login.html"
+		driver.get(url)
+		driver.find_element_by_css_selector('.username').send_keys('admin')
+		driver.get_screenshot_as_file("../img/1.jpg")
+		sleep(2)
+		driver.quit()
+
+验证码 了解
+	测试环境 去掉验证码
+	生产环境 设置万能验证码
+	验证码识别技术
+	记录cookie (推荐) 格式 python中的字典
+
+	cookie原理 客户端请求服务器 如果服务器需要记录用户状态 就给客户端发一个cookie 浏览器再次请求该网站时 浏览器将网址连同cookie一起提交给服务器 服务器检查cookie 来辨认用户
+
+	webdriver中对cookie操作的方法
+		get_cookie(name) 获取指定cookie
+		get_cookies() 获取此网站所有本地cookie
+		add_cookie(str) 添加cookie str为python中字典格式 键值对
+	

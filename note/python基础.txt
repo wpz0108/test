@@ -1,0 +1,410 @@
+字符串容器 序列式 支持依据索引 元素不能修改 单一数据类型
+	str="abcde"
+
+	while循环		
+		i=0
+		while i<len(str):
+			print(str[i])
+			i+=1
+	for-in循环		
+		for val in str:
+			print(val)
+
+	str.replace('a','f') 替换
+	str.find('a',起始位置,结束位置) 查找字符的索引位置
+	str[2,4] 根据索引获取切片
+	str.split('') 截取成多个部分
+	str.strip() 去除空格
+	str.strip(str) 去除指定字符 rstrip lstrip
+	str.isalpha() 是否是字母
+
+列表容器 存储多种数据类型 支持对元素修改 删除等操作 序列式 支持索引 切片
+	list=[1,"a",'b',2,3]  list = list("abcd") list=list([1,2,'a'])
+	定义空列表	list1=[] 或者list1=list()
+	遍历		while for-in 同字符串
+	列表是可变的 对列表操作是在当前列表操作 不产生新的列表
+	增删改查
+		list.append() 列表尾部插入 可以插入列表 将列表作为一个元素插入到list
+		list.insert(index,str) 指定索引位置插入
+		list.extend() 将另一列表所有元素 追加到此列表
+		list[0] 索引访问 
+		list[index]=str1 修改元素
+		in ,not in 判断元素是否存在于列表 (if str in list:index=list.index(str) print(index))	
+		list.index(str) 查找str在list中下标索引 不存在会报错 (if str in list:index=list.index(str) print(index))
+		list.count(str) str在list中出现次数 (if list.count(str)>0:index=list.index(str) print(index))
+		del list[index] python内置函数(len del) 
+		del list 提前杀死列表释放内存
+		list.pop(index) 根据索引删除 默认不写则从后往前删除 print(list.pop()) 返回值为 删除的元素
+		list.clear() 清空 list=[] 或者 list=list()
+		list.remove(元素) 根据元素删除 只删除第一次出现的元素
+	list[1,3] 切片获得截取元素
+	list=[[1,2],['a',3]] 列表中存储列表
+	可以存储不同类型数据 建议存储相同类型 便于操作
+	len(list) 列表元素个数
+	
+	list.sort() 排序 默认升序 list.sort(reverse=False)
+	list.reverse() 反转列表 
+	list.sort(reverse=True) 降序
+	总结
+		[]存储
+		存储任意类型数据 建议存储同样类型数据 元素可以修改 
+		序列式 支持索引 切片
+		while for in   not in
+	三个教室给八个老师随机分配教室
+	import random
+	str="abcdefgh"
+	school=[[],[],[]]
+	for x in str:
+	    index=random.randint(0,2)
+	    school[index].append(x)
+
+元组 与列表类似 元组的元素不可修改 ()定义 只支持遍历 查找 序列式 支持索引 切片 比列表节省空间
+	空元组 tuple=() tuple=tuple() 定义之后不可修改
+	只有一个元素 要加逗号 tuple=(1,)
+	tuple=(1,2,3)  tuple = tuple("123456") tuple=tuple([1,2])
+	tuple=((1,2),(3,4))
+	print(tuple[1:3]) 切片
+	tuple[index] 通过索引获取元素
+	元组的元素不可修改或删除 可以查看或遍历元组元素
+	查询元素出现次数 索引位置 tuple.count(str) tuple.index(str)
+	遍历 while for 类似列表
+
+字典 存储任意类型 每个元素都是键值对 {}包裹 无序可变
+	空字典 dict={} dict = dict()
+	dict={'a':1,'b':2,'name': 'Obama', 'age': 18, 'sex': '男'}
+	dict={key:{},key:{}}
+    键唯一 如果重复 后者键值对替换掉前者 键一般字符或者数字 值任意
+
+	通过键获得值 键不存在报错 dict['a']
+	通过get获得 键不存在返回none 可设置默认值 dict.get('d','default')
+	dict['f']=5 键存在则是修改 键不存在则是添加键值对
+	dict.pop('name') 通过键删除
+	dict.clear() 等价于 dict = {} 或者 dict = dict()
+	del dict[键]
+	len(dict) 键值对个数
+
+	获得字典键的列表 keys=dict.keys() 类型dict_keys 转换成列表 list(keys)
+	获得字典值得列表 values=dict.values()  类型dict_values 转换成列表 list(values)
+	获得键值对列表 items=dict.items()  类型dict_items 转换成列表 list(items) [(),()] 列表中元素为元组
+
+	for key,value in dict.items():
+		print(key,value)
+	字典通过{}定义 每个元素是键值对
+	不支持索引 切片
+	根据键查询元素效率高 键一般是数字 字符串 键唯一不重复
+	值可以重复 任意类型
+	for无法直接遍历字典 需要将字典转换为类似列表
+集合 set 无序不重复元素集 无序所以不支持下标操作 切片
+	my_set=set() 空集合
+	my_set={1,2,3,4} 包含元素的集合
+	my_set = set([1, 2, 3, 4, 5, 5]) 用容器创建集合 set会去除重复值
+	my_set.add('a') 添加一个元素
+
+	my_set.update([60, 40, 80, 90]) 
+	my_set.update((160, 140, 180, 190))
+	my_set.update("hello")          添加多个元素 添加容器元素
+	添加的是字典 会将字典的key添加到集合
+
+	my_set.pop() 删除集合任意一个元素 集合为空报错
+	my_set.remove(element) 删除元素 元素不存在则报错
+	my_set.discard(val) 删除元素 元素不存在也不报错
+
+	for val in my_set:
+		print(val) //遍历
+
+	my_set1.union(my_set2)   my_set1 | my_set2  并集
+	my_set1.intersection(my_set2)  my_set1 & my_set2  交集
+	结果为新集合
+
+	{}定义 每个元素任意类型 不是键值对
+	不支持切片 索引
+	元素唯一不重复
+	for循环可以
+
+
+
+
+# 单行注释:
+# 格式: # 对代码的描述文字
+# 快捷键: ctrl + /  取消注释 ctrl + / (除了mac本)
+# cmd + / (mac本)
+# 注意: 如果打了注释的代码 python是不会执行注释的代码 或者文字
+
+# 多行注释:
+# 格式: """说明的文字"""  或者 '''说明的文字'''
+# 多行注释是没有快捷键的
+
+变量类型 
+int(有符号整数) float(浮点数) bool(布尔) str(字符串 string)
+type(变量名或者数值) 就可以查看变量名或者数值的数据类型
+
+格式化
+%s 等于str -> string   
+%d 等于digit(整数) 
+%f 等于 float 默认情况下 python使用%f 会保留小数点后面六位 %.2f 保留两位小数
+如果想打印一个bool值 如果想显示True 或者 False 要使用%s
+
+\n 叫做换行符 就是键盘中的回车键
+# 单纯的一个\ 需要书写两个\\
+# 单纯的一个% 需要书写两个%%
+print("成活率达到了%d%%" % num)
+print("你好\\n世界")
+
+# python3.x程序的输入使用的input
+# input 得到的结果是字符串类型
+my_name = input("请输入您的名字:")
+print("名字:%s 年龄:%s岁" %(my_name, my_age))
+
+算术运算符 
++ - * /
+//	取整除	返回商的整数部分 9//2 输出结果 4 , 9.0//2.0 输出结果 4.0
+ %	取余	
+**	指数	a**b 为10的20次方
+复合赋值运算符
+# +=	加法赋值运算符	c += a 等效于 c = c + a
+# -=	减法赋值运算符	c -= a 等效于 c = c - a
+# *=	乘法赋值运算符	c *= a 等效于 c = c * a
+# /=	除法赋值运算符	c /= a 等效于 c = c / a
+# %=	取模赋值运算符	c %= a 等效于 c = c % a
+# **=	幂赋值运算符	c **= a 等效于 c = c ** a
+# //=	取整除赋值运算符	c //= a 等效于 c = c // a
+
+数据类型转换
+my_num = int(my_str) 转整数
+my_f = float(my_str) 转浮点
+print(type(my_f)) 打印类型
+my_str = str(num) 转字符串
+
+循环
+if判断 if-else if-elif-else while  for-in
+# while循环和break配合使用
+# 如果执行了break  while循环将终止 break后面的也就不再执行 (直接跳出循环)
+# for循环和break配合使用
+# 如果执行了break  for循环将终止 break后面的也就不再执行 (直接跳出循环)
+
+# for循环
+# for-else 配合使用 带for循环完成后 会走else中的代码
+# for i in range(5):
+#     print(i)
+# else:
+#     print("else")
+
+
+# for循环中 如果执行了break else中的代码将不再执行
+# for i in range(5):
+#     print(i)
+#     if i == 2:
+#         break
+# else:
+#     print("else")
+
+# while循环
+i = 0
+while i < 5:
+    print(i)
+    if i == 2:
+        break
+    i += 1
+else:
+    print("else")
+
+
+猜拳游戏
+import random
+# 使用循环
+print("马上开始游戏~~~~~~~~~~~")
+# 死循环
+while True:
+    # 定义一个变量 记录用户(玩家)的输入(拳法)
+    player = int(input("请输入: 剪刀(0) 石头(1) 布(2):"))
+    # 定义一个变量 记录电脑的输入
+    # randint(0, 2) -> [0, 2]   0<=x<=2
+    computer = random.randint(0, 2)
+    print("玩家:%d" % player)
+    print("电脑:%d" % computer)
+    print("==========================")
+    # 玩家胜利
+    if (player == 0 and computer == 2) or (player == 1 and computer == 0) or (player == 2 and computer == 1):
+        print("玩家胜利!!!!")
+    # 判断玩家和电脑平局
+    elif (player == computer):
+        print("玩家和电脑打成平局!!!")
+    # 其他就是为玩家失败
+    else:
+        print("玩家失败!!!")
+
+
+
+
+关系运算符
+== >= <= >  < !=
+
+逻辑运算符
+and or not  与 或 非
+
+字符串
+定义一个空的字符串 '' 或者 "" 或者 str()
+len(str) 字符串长度
+保留文本格式 ''''''
+str='''
+	hello 123
+	hello word
+'''
+str="hello"
+str[1] //e 有序字符串 通过索引下标获得
+
+# 切片的语法：[起始:结束(开区间):步长]
+# 字符串是不可变的(复制版的)
+a = "abcdef"
+# 'abc' -> a[0:3]   或者  a[:3]
+# 如果是从头部开始 0可以省略
+操作方法 
+find str.find(str1) 包含str1就返回开始的下标 不包含返回-1
+index str.index(str1) 类似find 但是不包含str1会报错
+count str.count(str1) str1在str出现的次数
+replace  str.replace(str1,str2) 将str中的str1换成str2
+split str.split(str1,maxsplit) 将str以str1进行分割 如果有maxsplit 则分割maxsplit次 剩下的不分割
+		a="aadbadcaddad"
+		ret5 = a.split("ad",2)
+		print(ret5)   //['a', 'b', 'caddad']                    
+capitalize str.capitalize() 字符串首字母变成大写 其余位置改成小写
+title str.title() 将str每个单词变为首字母大写
+startswith str.startswith(str1) 是否以str1开头 true或者false
+endswith str.endswith(str1) 是否以str1结尾 true或者false
+lower str.lower() str中大写字母变为小写
+upper str.upper() str中小写字母变为大写
+ljust str.ljust(len,str1) 字符串左端对齐 用str1填充至len长度 len低于str长度则不填充
+rjust str.rjust(len,str1) 字符串右端对齐 用str1填充至len长度 len低于str长度则不填充
+center str.center(len,str1)  居中 用str1填充至len长度
+lstrip str.lstrip(str1)  删除左边str1字符 默认删空格
+rstrip  strip 删右边 删两边
+isalpha str.isalpha() 是否都是字母 true或者false
+isdigit 是否只包含数字 isalnum 都是字母或者数字 isspace是否只包含空格
+str.join(list) 将list每个元素以str连接起来组成新字符串
+
+# 不可变的
+# int float bool str 元组
+
+# 可变的
+# 列表 字典
+
+字符串*数字 重复数字次字符串
+列表 元组 * 数字 将里面元素重复数字次 
+if-in 字符串元组字典 查看是否在
+if str in dict.values()
+
+
+# 轨道交通价格调整为：
+# 6公里(含)内3元;
+# 6公里至12公里(含)4元;
+# 12公里至22公里(含)5元;
+# 22公里至32公里(含)6元;
+# 32公里以上部分，每增加1元可乘坐20公里。
+
+km=5 //定义出行公里数
+e_money //单程票价
+
+if km >0 and km <=6:
+	e_money=3
+elif km > 6 and km <= 12:
+	e_money=4
+elif km > 12 and km <= 22:
+    e_money = 5
+elif km > 22 and km <= 32:
+    e_money = 6
+elif km > 32:
+	t_km=km-32
+	if t_km%20==0:
+		e_money=6 + t_km/20   
+	else:
+		e_money=6+int(t_km/20)+1 //int去掉小数点
+print('单程票价:%d'%e_money)
+
+# 使用市政交通一卡通刷卡乘坐轨道交通，
+# 每自然月内每张卡支出累计满100元以后的乘次，价格给予8折优惠;
+# 满150元以后的乘次，价格给予5折优惠;
+# 支出累计达到400元以后的乘次，不再享受打折优惠。
+
+# 假设每个月，小明都需要上20天班，每次上班需要来回1次，即每天需要乘坐2次同样路线的地铁
+# 最终得出这"20"天小明做地铁消费多少钱?(20天 40个来回)
+
+total_money = 0 //总金额
+for i in range(40): //模拟四十次
+    if total_money < 100:
+    	total_money += e_money
+    elif total_money >= 100 and total_money < 150:
+    	total_money += e_money * 0.8
+    elif total_money >= 150 and total_money < 400:
+        total_money += e_money * 0.5
+    elif total_money >= 400:
+        total_money += e_money
+print("这个月消费%.2f" % total_money)
+
+
+
+
+# 定义一个字典 保存所有人的数据
+all_dict = {}
+# {"小明": {"name": "小明", "age": "22"}, "小红": {"name": "小红", "age": "20"}}
+# 引导用户选择
+info_str = """1.添加名片
+2.删除名片
+3.修改名片
+4.查询名片
+5.退出系统
+请选择:"""
+
+
+# 定义一个死循环 重复执行功能
+while True:
+# 判断用户的输入
+    index = input(info_str)
+    # 添加名片
+    if index == "1":
+        # 引导用户输入他的名字和年龄
+        my_name = input("请输入您的名字:")
+        my_age = input("请输入您的年龄:")
+        # 构造成 一个字典
+        my_dict = {"name": my_name, "age": my_age}
+        # 添加数据到all_dict中
+        all_dict[my_name] = my_dict
+        print("添加名片成功....")
+    # 删除名片
+    elif index == "2":
+        # 引导用户输入需要删除的名字
+        my_name = input("请输入要删除数据的名字:")
+        # 判断这个名字是否存在在all_dict中
+        if my_name in all_dict:
+            # 删除
+            del all_dict[my_name]
+            print("删除数据成功...")
+        else:
+            print("您输入的名字有误!!!")
+    # 修改名片
+    elif index == "3":
+        # 引导用户输入名字
+        my_name = input("请输入要修改信息人的名字:")
+        # 判断名字是否存在在all_dict中
+        if my_name in all_dict:
+            # 引导用户输入修改后的年龄
+            my_age = input("请输入修改后的年龄:")
+            all_dict[my_name]["age"] = my_age
+            print("修改数据成功...")
+        else:
+            print("您输入的名字有误!!!")
+    # 查询名片
+    elif index == "4":
+        # 引导用户输入查询的名字
+        my_name = input("请输入您要查询的名字:")
+        # 判断名字是否存在
+        if my_name in all_dict:
+            n = all_dict[my_name]["name"]
+            a = all_dict[my_name]["age"]
+            print("姓名:%s 年龄:%s" % (n, a))
+        else:
+            print("您输入的名字有误!!!")
+
+    # 退出程序
+    elif index == "5":
+        print("欢迎下次使用程序!!!!")
+        break

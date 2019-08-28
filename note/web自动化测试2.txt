@@ -1,0 +1,215 @@
+框架 framework 解决一类事情的功能集合
+
+unitTest框架 专门进行执行代码测试的框架  Python中的单元测试框架 Python中自带的单元测试框架是unittest模块
+
+为何使用unitTest
+	组织多个测试用例执行
+	提供丰富的断言方法
+	提供丰富的日志和测试结果(生成测试报告)
+
+unitTest核心
+	TestCase
+	TestSuite
+	TextTestRunner
+	Fixture
+
+TestCase 测试用例
+	一个testCase就是一条测试用例(一个完整的测试流程)
+	导包 import unittest 导入unittest框架
+	继承 unittest.TestCase 测试类继承它
+	测试类中的测试方法必须以test开头(unittest.TestCase类批量运行方法就是搜索执行test开头的方法)
+
+			import unittest
+
+			class Test(unittest.TestCase):
+			    def test1(self):
+			        print('test1')
+			    def test2(self):
+			        print('test2')
+
+			if __name__=='__main__':
+			    unittest.main()
+
+TestSuite 测试套件 多条测试用例集合在一起
+	实例化  suite=unittest.TestSuite()
+	添加用例 suite.addTest(className('MethodName')) 单条添加 可以添加不同的测试类中单个方法
+	添加扩展 suite.addTest(unittest.makeSuite(className)) 搜索并添加指定类中test开头的所有方法 不能添加单个方法
+
+	一条测试用例(一个.py文件 测试类中包含多个方法)内 多个方法也可以使用测试套件
+	testsuite需要配合TextTestRunner使用
+
+
+	项目下Case目录下test1.py文件		
+			import unittest
+			class Test1(unittest.TestCase):
+			    def test01(self):
+			        print("case1-test01")
+			    def test02(self):
+			        print("case1-test02")
+			    def test03(self):
+			        print("case1-test03")
+			if __name__ == '__main__':
+			    unittest.main()
+	项目下Case目录下test2.py文件	
+			import unittest
+			class Test2(unittest.TestCase):
+			    def test01(self):
+			        print("case2-test01")
+			    def test02(self):
+			        print("case2-test02")
+			    def test03(self):
+			        print("case2-test03")
+			if __name__ == '__main__':
+			    unittest.main()
+
+	项目下其他目录中test1_testsuite文件
+			import unittest
+			from Case.test1 import Test1
+			from Case.test2 import Test2
+			if __name__ == '__main__':
+			    # 实例化suite
+			    suite=unittest.TestSuite()
+			    # 添加用例方法 单条添加 也可以添加类中所有方法
+			    suite.addTest(Test1('test01'))
+			    suite.addTest(Test1('test02'))
+			    suite.addTest(Test2('test02'))
+			    #suite.addTest(unittest.makeSuite(Test1))
+			    # 实例化TextTestRunner调用run方法执行
+			    runner=unittest.TextTestRunner()
+			    runner.run(suite)
+TextTestRunner
+	执行测试用例套件
+	实例化 runner=unittest.TextTestRunner()
+	执行套件 runner.run(suite)
+
+Fixture
+	对一个测试用例环境的搭建和销毁就是一个 fixture
+	初始化 重写setUp方法 作用:做初始工作 实例化浏览器 最大化窗口 设置隐式等待等
+	结束(销毁) 重写tearDown方法  作用:做结束工作 退出登录 关闭浏览器等
+	都继承自unittest.TestCase
+	如果一个测试类中有多个test开头的方法 每个方法执行前会执行setUp方法 结束时会执行tearDown方法
+
+一个登录测试案例
+		import unittest
+		from selenium import webdriver
+		from time import sleep
+
+		class Login(unittest.TestCase):
+		    def setUp(self):
+		        # 实例化浏览器 打开链接 最大化窗口 设置隐式等待
+		        self.driver=webdriver.Firefox()
+		        # 应该地址用网址类型而不是文件 
+		        self.driver.get(r'file:///d:/test/index.html')
+		        # self.driver.maximize_window()
+		        self.driver.implicitly_wait(30)
+		    def test_login(self):
+		        driver=self.driver
+		        # 登录 输入用户名 密码 点击登录 退出
+		        driver.find_element_by_link_text("登录").click()
+		        driver.find_element_by_css_selector('.username').send_keys('admin')
+		        driver.find_element_by_css_selector('.password').send_keys('123456')
+		        driver.find_element_by_css_selector('.submit_button').click()
+		        driver.find_element_by_link_text("退出")
+		    def tearDown(self):
+		        self.driver.quit()
+		if __name__ == '__main__':
+		    unittest.main()
+
+defaultTestLoader 
+	用法
+	unittest.defaultTestLoader类通过它的discover()方法自动搜索指定目录指定开头的.py文件 并将查找到的测试用例组装到测试套件
+	discover=unittest.defaultTestLoader.discover('指定目录',pattern="xx*.py")
+	运行
+	runner=unittest.TextTestRunner()
+	runner.run(discover)
+
+		import unittest
+		if __name__ == '__main__':
+		    discover=unittest.defaultTestLoader.discover('./case',pattern='test*.py')
+		    unittest.TextTestRunner().run(discover)
+
+defaultTestLoader 和TestSuite区别
+	前者搜索指定目录指定开头的.py文件 添加测试用例(testcase)中所有test开头的方法 不能指定添加方法 是后者另一种实现方式
+	后者可以添加测试用例(testcase)中(.py文件)所有test开头的方法或者添加指定的test开头的方法
+
+断言 程序代替人为判断测试程序执行结果是否符合预期结果的过程
+	自动化脚本执行时候 我们不知道执行结果是否符合预期 需要让程序代替人去检测程序执行结果是否符合预期 需要使用断言
+	分类
+		基本布尔型断言
+		比较断言
+		复杂断言
+
+	基本布尔型断言 
+		assertEqual(arg1,arg2,msg=none) 验证arg1=arg2 不相等则fail
+		assertIn(arg1,arg2,msg=none) 验证arg1是arg2的子串 不是则fail
+
+
+			import unittest
+			import time
+			from time import sleep
+			import sys
+			from selenium import webdriver
+
+			class Web_Login(unittest.TestCase):
+			    def setUp(self):
+			        # 实例化浏览器 打开项目 最大化窗口 隐式等待设置
+			        self.driver=webdriver.Firefox()
+			        self.driver.get(r"file:///d:/test/index.html")
+			        # self.driver.maximize_window()
+			        self.driver.implicitly_wait(30)
+			    def test_web_login(self):
+			        driver=self.driver
+			        # 点击登录跳转页面 定位用户名和密码 点击登录 安全退出
+			        driver.find_element_by_link_text("登录").click()
+			        sleep(3)
+			        driver.find_element_by_css_selector("[alt*='用户']").send_keys("admin")
+			        driver.find_element_by_css_selector("[alt*='密码']").send_keys("123456")
+			        sleep(3)
+			        driver.find_element_by_css_selector("[type='submit']").click()
+			        sleep(3)
+			        # 获取登录提示信息
+			        # text=driver.find_element_by_css_selector('.loginfo')
+			        text="admi1"
+			        try:
+			            self.assertIn('admin',text)
+			        except AssertionError:
+			            # print("info: ",sys.exc_info())
+			            # 设置时间字符串
+			            nowtime=time.strftime('%Y_%m_%d %H_%M_%S')
+			            # 动态保存异常的截图 时间--错误信息
+			            driver.get_screenshot_as_file("./img/%s--%s.png"%(nowtime,sys.exc_info()[1]))
+			            # 抛出捕获的异常 不写则用例显示执行成功 raise AssertionError
+			            raise
+			        sleep(3)
+			        # driver.find_element_by_link_text("安全退出").click()
+			    def tearDown(self):
+			        self.driver.quit()
+			if __name__=="__main__":
+			    unittest.main()
+
+html测试报告
+	测试结果的体现形式
+	包含本次测试用例的详情
+	生成方式 export test results (unittest自带)
+			HTMLTestRunner(第三方模板 重点)
+
+	步骤
+		复制HTMLTestRunner 放到common目录
+		导入HTMLTestRunner unittest包
+		discover测试用例
+		设置报告生成路径 文件名
+		打开报告
+		实例化HTMLTestRunner对象
+		执行run方法
+
+
+			import unittest,time
+			from Test.Common.HTMLTestRunner import HTMLTestRunner
+			discover=unittest.defaultTestLoader.discover('.',pattern='test*.py')
+			if __name__ == '__main__':
+			    dir_path="../Report/"
+			    now=time.strftime("%Y_%m_%d %H_%M_%S")
+			    file_name=dir_path+now+"Report.html"
+			    with open(file_name,'wb') as f:
+			        HTMLTestRunner(stream=f,title="自动化",description='win7').run(discover)
+
